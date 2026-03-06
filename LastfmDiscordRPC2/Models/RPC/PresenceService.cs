@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.String;
 using LastfmDiscordRPC2.DataTypes;
 using LastfmDiscordRPC2.Exceptions;
 using LastfmDiscordRPC2.IO;
@@ -26,9 +27,11 @@ public sealed class PresenceService : IPresenceService
 
     private bool _isFirstSuccess;
     private int _exceptionCount;
-    private DateTimeOffset _presenceStartedTime;
+    private bool _hasClearedDueToStopped;
 
     private bool IsRetry => _exceptionCount <= 3;
+    private const int StoppedThresholdPolls = 1;
+    private const int PollIntervalSeconds = 2;
 
     public PresenceService(
         LoggingService loggingService,
@@ -42,7 +45,7 @@ public sealed class PresenceService : IPresenceService
         _discordClient = discordClient;
         _saveCfgService = saveCfgService;
         _context = context;
-        _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+        _timer = new PeriodicTimer(TimeSpan.FromSeconds(PollIntervalSeconds));
         _timerCancellationTokenSource = new CancellationTokenSource();
     }
 
@@ -53,8 +56,8 @@ public sealed class PresenceService : IPresenceService
         SaveCfg saveSnapshot = _saveCfgService.GetSaveSnapshot();
 
         _isFirstSuccess = true;
+        _hasClearedDueToStopped = false;
         _discordClient.Initialize(saveSnapshot);
-        _presenceStartedTime = DateTimeOffset.Now;
         await PresenceLoop(saveSnapshot);
     }
 
@@ -77,7 +80,7 @@ public sealed class PresenceService : IPresenceService
                 try
                 {
                     TrackResponse response = await _lastfmService.GetRecentTracks(saveSnapshot.UserAccount.Username);
-                    UpdatePresence(response);
+                    await UpdatePresence(response, saveSnapshot.UserRPCCfg.ExpiryMode).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -91,8 +94,6 @@ public sealed class PresenceService : IPresenceService
                         _timerCancellationTokenSource.Cancel();
                     }
                 }
-
-                PresenceExpiry(saveSnapshot.UserRPCCfg.ExpiryMode, saveSnapshot.UserRPCCfg.ExpiryTime);
             }
         }
         catch (OperationCanceledException)
@@ -102,12 +103,49 @@ public sealed class PresenceService : IPresenceService
         }
     }
 
-    private void UpdatePresence(TrackResponse response)
+    /// <summary>
+    /// Returns true only when Last.fm explicitly reports nowplaying="true". Missing, empty, or "false" all count as stopped.
+    /// </summary>
+    private static bool IsNowPlaying(Track track)
+    {
+        string state = track.NowPlaying?.State?.Trim() ?? Empty;
+        return state.Equals("true", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task UpdatePresence(TrackResponse response, bool deactivateWhenInactive)
     {
         if (response.RecentTracks.Tracks.Count == 0)
         {
             _loggingService.Info("No tracks found for user.");
             UnsetPresence();
+            return;
+        }
+
+        Track firstTrack = response.RecentTracks.Tracks[0];
+        bool isNowPlaying = IsNowPlaying(firstTrack);
+
+        if (isNowPlaying)
+        {
+            if (_hasClearedDueToStopped)
+            {
+                _loggingService.Info($"Playback restarted. Now playing: {firstTrack.Artist.Name} - {firstTrack.Name}");
+            }
+            _hasClearedDueToStopped = false;
+        }
+        else
+        {
+            // Last.fm says not now playing: never use Windows API to show RPC. Default to Last.fm only; no RPC when Last.fm says not playing.
+            if (_hasClearedDueToStopped)
+            {
+                return;
+            }
+
+            if (deactivateWhenInactive)
+            {
+                _loggingService.Info("Last.fm reports not playing. Cleared RPC.");
+                _hasClearedDueToStopped = true;
+                _discordClient.ClearPresence();
+            }
             return;
         }
 
@@ -123,7 +161,7 @@ public sealed class PresenceService : IPresenceService
 
             if (_isFirstSuccess)
             {
-                _loggingService.Info("Presence has been set!");
+                _loggingService.Info("Playback started. Presence has been set!");
             }
 
             _isFirstSuccess = false;
@@ -171,25 +209,6 @@ public sealed class PresenceService : IPresenceService
             default:
                 _loggingService.Error($"Unhandled exception! Please report to developers\n{e.Message}\n{e.StackTrace ?? Empty}");
                 return false;
-        }
-    }
-
-    private void PresenceExpiry(bool expiryMode, TimeSpan expiryTime)
-    {
-        if (!expiryMode)
-        {
-            return;
-        }
-
-        DateTimeOffset currentTime = DateTimeOffset.Now;
-
-        TimeSpan timeSincePresenceStarted = currentTime - _presenceStartedTime;
-        TimeSpan timeSinceLastScrobble = currentTime - _lastfmService.LastScrobbleTime;
-
-        bool expired = timeSincePresenceStarted > expiryTime && timeSinceLastScrobble > expiryTime;
-        if (expired)
-        {
-            _timerCancellationTokenSource.Cancel();
         }
     }
 

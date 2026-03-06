@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>LastfmDiscordRPC2.Platform.Windows</RootNamespace>
+    <AssemblyName>LastfmDiscordRPC2.Windows</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LastfmDiscordRPC2\LastfmDiscordRPC2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WindowsPlaybackStateProvider.cs" />
+  </ItemGroup>
+</Project>

@@ -67,7 +67,7 @@ public static class DiscordClientExtensions
             case AlbumName:
                 return firstTrack.Album.Name;
             case CurrentState:
-                return firstTrack.NowPlaying.State == Empty ? Empty : "Now playing";
+                return firstTrack.NowPlaying.State == "true" ? "Now playing" : "Paused";
             case Timestamp:
                 bool success =
                     long.TryParse(firstTrack.Date.Timestamp, NumberStyles.Number, null, out long unixLastScrobbleTime);

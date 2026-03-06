@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
+using ReactiveUI;
 
 namespace LastfmDiscordRPC2.ViewModels;
 
 public abstract class AbstractViewModel : ReactiveObject
 {
-    public virtual string Name { get; }
+    public virtual string Name { get; } = string.Empty;
 }

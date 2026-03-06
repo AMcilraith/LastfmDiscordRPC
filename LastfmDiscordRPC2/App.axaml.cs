@@ -34,7 +34,8 @@ public class App : Application
             _desktop = desktop;
             _desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
             _desktop.MainWindow = new MainWindow(mainViewModel);
-
+            if (!Program.ShowMainWindowOnStartup)
+                _desktop.MainWindow.Hide();
 
             // Yes, I know this is not ideal.
             _lifetimeScope.Disposer.AddInstanceForDisposal(_lifetimeScope.Resolve<IDiscordClient>());

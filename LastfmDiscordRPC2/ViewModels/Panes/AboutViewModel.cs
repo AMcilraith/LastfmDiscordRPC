@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 using LastfmDiscordRPC2.IO;
 using LastfmDiscordRPC2.ViewModels.Controls;
 using ReactiveUI;
@@ -13,7 +13,7 @@ public sealed class AboutViewModel : AbstractPaneViewModel
     
     
     public LoggingControlViewModel LoggingControlViewModel { get; }
-    public string GithubPage { get; init; } = "https://www.github.com/RegorForgotTheirPassword/LastfmDiscordRPC";
+    public string GithubPage { get; init; } = "https://github.com/AMcilraith/LastfmDiscordRPC";
 
     public override string Name => "About";
 

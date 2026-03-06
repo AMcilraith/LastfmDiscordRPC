@@ -10,6 +10,8 @@ namespace LastfmDiscordRPC2.Views;
 
 public partial class MainWindow : Window
 {
+    public MainWindow() : this(null) { }
+
     public MainWindow(MainViewModel? dataContext)
     {
         InitializeComponent();
@@ -23,6 +25,8 @@ public partial class MainWindow : Window
 
         DataContext = dataContext;
         
+        if (dataContext is null) return;
+        
         foreach (AbstractPaneViewModel viewModel in dataContext.Children)
         {
             UserControl? control = this.FindControl<UserControl>(viewModel.Name);
@@ -34,7 +38,7 @@ public partial class MainWindow : Window
         
         IsVisibleProperty.Changed.AddClassHandler<Window>((window, args) =>
         {
-            if (window == this && window.PlatformImpl != null && (bool)args.NewValue)
+            if (window == this && window.PlatformImpl != null && args.NewValue is true)
             {
                 WindowState = WindowState.Normal;
             }

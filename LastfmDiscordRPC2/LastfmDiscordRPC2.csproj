@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
@@ -37,7 +37,7 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.0-rc1" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.0-rc1" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0-rc1" />
-        <PackageReference Include="DiscordRichPresence" Version="1.2.1.24"/>
+        <PackageReference Include="DiscordRichPresence" Version="1.6.1.70"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
         <PackageReference Include="RestSharp" Version="112.1.0" />
     </ItemGroup>

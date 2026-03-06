@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -25,7 +25,7 @@ public sealed class DiscordClient : IDiscordClient
     private readonly PreviewControlViewModel _previewControlViewModel;
     private readonly LastfmAPIService _lastfmService;
 
-    private SaveCfg _saveSnapshot;
+    private SaveCfg _saveSnapshot = null!;
 
     public bool IsReady { get; private set; }
 
@@ -119,6 +119,7 @@ public sealed class DiscordClient : IDiscordClient
 
         return new RichPresence
         {
+            Type = ActivityType.Listening,
             Details = this.GetParsedString(response, _saveSnapshot.UserRPCCfg.Details, ByteCount.Default),
             State = this.GetParsedString(response, _saveSnapshot.UserRPCCfg.State, ByteCount.Default),
             Assets = new DiscordRPC.Assets

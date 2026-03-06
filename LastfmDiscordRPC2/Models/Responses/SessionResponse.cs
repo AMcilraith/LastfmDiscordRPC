@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace LastfmDiscordRPC2.Models.Responses;
 
 public record SessionResponse : ILastfmAPIResponse
 {
-    [JsonProperty("session")] public Session LfmSession { get; init; }
+    [JsonProperty("session")] public required Session LfmSession { get; init; }
     
     public record Session 
     {

@@ -26,8 +26,8 @@ public sealed class SettingsViewModel : AbstractPaneViewModel, ISettableViewMode
     private bool _isAppIDError;
     private bool _isExpiryTimeError;
     
-    private string _loginMessage;
-    private string _appID;
+    private string _loginMessage = string.Empty;
+    private string _appID = string.Empty;
     
     private TimeSpan _presenceExpiryTime;
 

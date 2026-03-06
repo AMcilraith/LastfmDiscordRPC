@@ -1,9 +1,9 @@
-﻿<div align="center">
+<div align="center">
 
 ![Banner](./assets/banner.png)
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e0da00a962b5448cbd888887b9f9a77f)](https://app.codacy.com/gh/RegorForgotTheirPassword/LastfmDiscordRPC/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![Downloads](https://img.shields.io/github/downloads/regorforgot/lastfmdiscordrpc/total)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e0da00a962b5448cbd888887b9f9a77f)](https://app.codacy.com/gh/AMcilraith/LastfmDiscordRPC/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+![Downloads](https://img.shields.io/github/downloads/AMcilraith/LastfmDiscordRPC/total)
 <h3>A simple cross-platform application that allows you to set a rich presence on your Discord account from your Last.fm profile.</h3>
 <h4>Made with AvaloniaUI</h4>
 </div>
@@ -19,7 +19,9 @@
 > [!IMPORTANT]
 > **Please note:** This application requires the [.NET 8 runtime environment](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
-Download the [latest release](https://github.com/RegorForgot/LastfmDiscordRPC/releases/latest), log in with your Last.fm account and start the rich presence service. 
+Download the [latest release](https://github.com/AMcilraith/LastfmDiscordRPC/releases/latest), log in with your Last.fm account and start the rich presence service.
+
+**Command-line:** Use `--no-ui` or `-n` to start without showing the main window (tray icon only).
 
 ## Supported Platforms
 

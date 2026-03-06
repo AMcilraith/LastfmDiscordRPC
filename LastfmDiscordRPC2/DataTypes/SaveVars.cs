@@ -6,9 +6,9 @@ namespace LastfmDiscordRPC2.DataTypes;
 public struct SaveVars
 {
     internal const string DefaultAppID = "997756398664421446";
-    internal const string DefaultDetails = $"🎵 {TrackName}";
-    internal const string DefaultState = $"{ArtistName} | 💿 {AlbumName}";
-    internal const string DefaultLargeImageLabel = AlbumName;
+    internal const string DefaultDetails = "Playing Music";
+    internal const string DefaultState = $"{ArtistName} | {AlbumName}";
+    internal const string DefaultLargeImageLabel = $"{TrackName}";
     internal const string DefaultSmallImageLabel = $"{Timestamp}{CurrentState}";
     internal const string DefaultButtonLabel = $"{PlayCount} scrobbles";
     internal const string DefaultButtonURL = $"https://www.last.fm/music/{ArtistName}/_/{TrackName}";

@@ -73,7 +73,7 @@
                 VerticalAlignment="Center">
 
                 <Label Classes="SubHeading">
-                    <TextBlock Text="Last.fm" />
+                    <TextBlock Text="Playing Music" />
                 </Label>
 
                 <Label Classes="Text">

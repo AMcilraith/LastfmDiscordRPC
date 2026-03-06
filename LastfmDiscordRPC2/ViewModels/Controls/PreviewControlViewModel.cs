@@ -25,7 +25,7 @@ public class PreviewControlViewModel : AbstractControlViewModel
     private bool _isTrackLoved;
     private bool _isCoolDown;
 
-    private TrackResponse _currentTrack;
+    private TrackResponse _currentTrack = null!;
     private ObservableCollection<RPCButton> _buttons = new ObservableCollection<RPCButton>();
 
     public bool IsTrackLoved

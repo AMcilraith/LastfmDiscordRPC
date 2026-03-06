@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using LastfmDiscordRPC2.Logging;
 using Newtonsoft.Json;
@@ -8,7 +8,7 @@ namespace LastfmDiscordRPC2.IO;
 public sealed class SaveCfgIOService : AbstractIOService
 {
     private readonly LoggingService _loggingService;
-    public SaveCfg SaveCfg { get; private set; }
+    public SaveCfg SaveCfg { get; private set; } = null!;
     public override string FilePath { get; protected set; } = $"{SaveFolder}/config.json";
     
     public SaveCfgIOService(LoggingService loggingService)

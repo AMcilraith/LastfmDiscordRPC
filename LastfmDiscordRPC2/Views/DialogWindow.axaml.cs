@@ -22,7 +22,7 @@ public partial class DialogWindow : Window
 
         WindowStateProperty.Changed.AddClassHandler<Window>((window, args) =>
         {
-            if (window.PlatformImpl == null || (WindowState)(args.NewValue ?? WindowState.Maximized) != WindowState.Minimized)
+            if (window.PlatformImpl == null || (args.NewValue is WindowState state ? state : WindowState.Maximized) != WindowState.Minimized)
             {
                 return;
             }
@@ -32,7 +32,7 @@ public partial class DialogWindow : Window
 
         IsVisibleProperty.Changed.AddClassHandler<Window>((window, args) =>
         {
-            if (window.PlatformImpl != null && (bool)args.NewValue)
+            if (window.PlatformImpl != null && args.NewValue is true)
             {
                 WindowState = WindowState.Normal;
             }
@@ -50,11 +50,13 @@ public partial class DialogWindow : Window
         IsCurrentOn = true;
         DialogWindow dialogWindow = new DialogWindow();
         Button? btn = dialogWindow.FindControl<Button>("Ok");
-
-        btn.Click += (_, _) =>
+        if (btn is not null)
         {
-            dialogWindow.Close();
-        };
+            btn.Click += (_, _) =>
+            {
+                dialogWindow.Close();
+            };
+        }
 
         dialogWindow.Show();
     }
